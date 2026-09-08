@@ -758,9 +758,35 @@ function checkout(){
 
 /* INITIAL LOAD */
 
+async function loadProducts(){
+
+    const { data, error } = await supabaseClient
+        .from("products")
+        .select("*")
+        .order("id", { ascending: false });
+
+    if(error){
+
+        console.error("Supabase Error:", error);
+
+        document.getElementById("productContainer").innerHTML =
+            "<p>Error: " + error.message + "</p>";
+
+        return;
+    }
+
+    products = data || [];
+
+    displayProducts(products);
+}
+
+
+/* INITIAL LOAD */
+
 loadProducts();
 
 </script>
+
 
 </body>
   </html>
