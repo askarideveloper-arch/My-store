@@ -777,7 +777,10 @@ async function loadProducts(){
 
     products = data || [];
 
-    displayProducts(products);
+alert("Products loaded: " + products.length);
+
+displayProducts(products);
+
 }
 
 
@@ -786,7 +789,6 @@ async function loadProducts(){
 loadProducts();
 
 </script>
-
 
 </body>
   </html>
