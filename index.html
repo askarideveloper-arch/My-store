@@ -496,69 +496,19 @@ footer p{
    this array.
 ========================================= */
 
-let products = [
+const SUPABASE_URL = "https://oqlovhxuitkuqnmvttza.supabase.co";
+const SUPABASE_KEY = "sb_publishable_T5EUaq_ivr5-Wiknxa7Cgg_EGjX2YKM";
 
-    {
-        id:1,
-        name:"Wireless Bluetooth Earbuds",
-        price:1499,
-        oldPrice:1999,
-        category:"electronics",
-        image:"https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1"
-    },
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
-    {
-        id:2,
-        name:"Gaming Mouse",
-        price:1299,
-        oldPrice:1699,
-        category:"gaming",
-        image:"https://images.unsplash.com/photo-1527814050087-3793815479db"
-    },
-
-    {
-        id:3,
-        name:"Premium Hoodie",
-        price:2499,
-        oldPrice:2999,
-        category:"fashion",
-        image:"https://images.unsplash.com/photo-1556821840-3a63f95609a7"
-    },
-
-    {
-        id:4,
-        name:"LED Desk Lamp",
-        price:1799,
-        oldPrice:2299,
-        category:"home",
-        image:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c"
-    },
-
-    {
-        id:5,
-        name:"Smart Watch",
-        price:2999,
-        oldPrice:3999,
-        category:"electronics",
-        image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30"
-    },
-
-    {
-        id:6,
-        name:"Gaming Keyboard",
-        price:2199,
-        oldPrice:2799,
-        category:"gaming",
-        image:"https://images.unsplash.com/photo-1587829741301-dc798b83add3"
-    }
-
-];
-
-
+let products = [];
 let cart = [];
 
-
-/* DISPLAY PRODUCTS */
+    
+        /* DISPLAY PRODUCTS */
 
 function displayProducts(list){
 
@@ -805,7 +755,7 @@ function checkout(){
 
 /* INITIAL LOAD */
 
-displayProducts(products);
+loadProducts();
 
 </script>
 
