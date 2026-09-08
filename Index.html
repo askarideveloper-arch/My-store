@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OP MART — Shop Smart</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f5f6f8;
+    color:#222;
+}
+
+/* HEADER */
+header{
+    background:#111827;
+    color:white;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.navbar{
+    max-width:1200px;
+    margin:auto;
+    height:70px;
+    display:flex;
+    align-items:center;
+    gap:25px;
+    padding:0 20px;
+}
+
+.logo{
+    font-size:26px;
+    font-weight:900;
+    color:#00e5ff;
+    white-space:nowrap;
+}
+
+.search{
+    flex:1;
+    display:flex;
+}
+
+.search input{
+    width:100%;
+    padding:13px 17px;
+    border:none;
+    outline:none;
+    border-radius:8px 0 0 8px;
+    font-size:15px;
+}
+
+.search button{
+    padding:0 20px;
+    border:none;
+    background:#00c853;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    border-radius:0 8px 8px 0;
+}
+
+.cart-btn{
+    background:#1f2937;
+    color:white;
+    border:1px solid #374151;
+    padding:11px 15px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* HERO */
+.hero{
+    max-width:1200px;
+    margin:25px auto;
+    padding:55px 35px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#111827,#1e3a8a);
+    color:white;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-bottom:12px;
+}
+
+.hero p{
+    color:#dbeafe;
+    font-size:17px;
+    margin-bottom:25px;
+}
+
+.shop-btn{
+    display:inline-block;
+    background:#00c853;
+    color:white;
+    padding:13px 22px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* CATEGORIES */
+.section{
+    max-width:1200px;
+    margin:35px auto;
+    padding:0 20px;
+}
+
+.section-title{
+    font-size:25px;
+    margin-bottom:18px;
+}
+
+.categories{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    padding-bottom:10px;
+}
+
+.category{
+    background:white;
+    border:1px solid #ddd;
+    padding:13px 20px;
+    border-radius:30px;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.category:hover{
+    background:#111827;
+    color:white;
+}
+
+/* PRODUCTS */
+.products{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.product{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid #e5e7eb;
+    transition:.2s;
+}
+
+.product:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 25px rgba(0,0,0,.1);
+}
+
+.product-img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    background:#eee;
+}
+
+.product-info{
+    padding:15px;
+}
+
+.product-name{
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.price{
+    font-size:21px;
+    font-weight:900;
+    color:#00a63c;
+}
+
+.old-price{
+    color:#999;
+    text-decoration:line-through;
+    font-size:13px;
+    margin-left:6px;
+}
+
+.buy-btn{
+    width:100%;
+    margin-top:13px;
+    padding:11px;
+    border:none;
+    border-radius:7px;
+    background:#111827;
+    color:white;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.buy-btn:hover{
+    background:#00a63c;
+}
+
+/* CART */
+.cart{
+    position:fixed;
+    right:-420px;
+    top:0;
+    width:390px;
+    max-width:95%;
+    height:100vh;
+    background:white;
+    z-index:2000;
+    box-shadow:-5px 0 25px rgba(0,0,0,.2);
+    transition:.3s;
+    padding:20px;
+}
+
+.cart.open{
+    right:0;
+}
+
+.cart-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.close{
+    border:none;
+    background:#eee;
+    padding:8px 12px;
+    cursor:pointer;
+    border-radius:6px;
+}
+
+.cart-items{
+    max-height:65vh;
+    overflow-y:auto;
+}
+
+.cart-item{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+    border-bottom:1px solid #ddd;
+    padding-bottom:12px;
+}
+
+.cart-item img{
+    width:65px;
+    height:65px;
+    object-fit:cover;
+    border-radius:6px;
+}
+
+.cart-total{
+    font-size:21px;
+    font-weight:bold;
+    margin-top:15px;
+}
+
+.checkout{
+    width:100%;
+    padding:14px;
+    border:none;
+    background:#00c853;
+    color:white;
+    border-radius:8px;
+    margin-top:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* FOOTER */
+footer{
+    margin-top:60px;
+    background:#111827;
+    color:white;
+    padding:40px 20px;
+    text-align:center;
+}
+
+footer p{
+    color:#9ca3af;
+    margin-top:8px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+    .products{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+@media(max-width:650px){
+
+    .navbar{
+        height:auto;
+        padding:12px;
+        flex-wrap:wrap;
+        gap:10px;
+    }
+
+    .logo{
+        font-size:22px;
+    }
+
+    .search{
+        order:3;
+        flex-basis:100%;
+    }
+
+    .hero{
+        margin:15px;
+        padding:35px 22px;
+    }
+
+    .hero h1{
+        font-size:30px;
+    }
+
+    .products{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .product-img{
+        height:170px;
+    }
+
+    .section{
+        padding:0 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="navbar">
+
+        <div class="logo">
+            OP MART
+        </div>
+
+        <div class="search">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search products..."
+                onkeyup="searchProducts()"
+            >
+            <button onclick="searchProducts()">Search</button>
+        </div>
+
+        <button class="cart-btn" onclick="openCart()">
+            🛒 Cart (<span id="cartCount">0</span>)
+        </button>
+
+    </div>
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <h1>Shop Smart. Shop OP MART.</h1>
+
+    <p>
+        Discover amazing products at affordable prices.
+        Fast ordering and trusted service.
+    </p>
+
+    <a href="#products" class="shop-btn">
+        Shop Now
+    </a>
+
+</section>
+
+
+<!-- CATEGORIES -->
+
+<section class="section">
+
+    <h2 class="section-title">
+        Categories
+    </h2>
+
+    <div class="categories">
+
+        <button class="category" onclick="filterCategory('all')">
+            All
+        </button>
+
+        <button class="category" onclick="filterCategory('electronics')">
+            📱 Electronics
+        </button>
+
+        <button class="category" onclick="filterCategory('fashion')">
+            👕 Fashion
+        </button>
+
+        <button class="category" onclick="filterCategory('home')">
+            🏠 Home
+        </button>
+
+        <button class="category" onclick="filterCategory('beauty')">
+            ✨ Beauty
+        </button>
+
+        <button class="category" onclick="filterCategory('gaming')">
+            🎮 Gaming
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- PRODUCTS -->
+
+<section class="section" id="products">
+
+    <h2 class="section-title">
+        Featured Products
+    </h2>
+
+    <div class="products" id="productContainer"></div>
+
+</section>
+
+
+<!-- CART -->
+
+<div class="cart" id="cart">
+
+    <div class="cart-header">
+
+        <h2>Your Cart</h2>
+
+        <button class="close" onclick="closeCart()">
+            ✕
+        </button>
+
+    </div>
+
+    <div class="cart-items" id="cartItems">
+        Your cart is empty.
+    </div>
+
+    <div class="cart-total">
+        Total: Rs <span id="cartTotal">0</span>
+    </div>
+
+    <button class="checkout" onclick="checkout()">
+        Proceed to Checkout
+    </button>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <h2>OP MART</h2>
+
+    <p>
+        Your trusted online shopping store.
+    </p>
+
+    <p>
+        © 2026 OP MART. All Rights Reserved.
+    </p>
+
+</footer>
+
+
+<script>
+
+/* =========================================
+   PRODUCT DATA
+
+   Later your ADMIN PANEL/API will replace
+   this array.
+========================================= */
+
+let products = [
+
+    {
+        id:1,
+        name:"Wireless Bluetooth Earbuds",
+        price:1499,
+        oldPrice:1999,
+        category:"electronics",
+        image:"https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1"
+    },
+
+    {
+        id:2,
+        name:"Gaming Mouse",
+        price:1299,
+        oldPrice:1699,
+        category:"gaming",
+        image:"https://images.unsplash.com/photo-1527814050087-3793815479db"
+    },
+
+    {
+        id:3,
+        name:"Premium Hoodie",
+        price:2499,
+        oldPrice:2999,
+        category:"fashion",
+        image:"https://images.unsplash.com/photo-1556821840-3a63f95609a7"
+    },
+
+    {
+        id:4,
+        name:"LED Desk Lamp",
+        price:1799,
+        oldPrice:2299,
+        category:"home",
+        image:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c"
+    },
+
+    {
+        id:5,
+        name:"Smart Watch",
+        price:2999,
+        oldPrice:3999,
+        category:"electronics",
+        image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+    },
+
+    {
+        id:6,
+        name:"Gaming Keyboard",
+        price:2199,
+        oldPrice:2799,
+        category:"gaming",
+        image:"https://images.unsplash.com/photo-1587829741301-dc798b83add3"
+    }
+
+];
+
+
+let cart = [];
+
+
+/* DISPLAY PRODUCTS */
+
+function displayProducts(list){
+
+    const container =
+        document.getElementById("productContainer");
+
+    container.innerHTML = "";
+
+    if(list.length === 0){
+
+        container.innerHTML =
+        "<p>No products found.</p>";
+
+        return;
+    }
+
+    list.forEach(product => {
+
+        container.innerHTML += `
+
+        <div class="product">
+
+            <img
+                class="product-img"
+                src="${product.image}"
+                alt="${product.name}"
+            >
+
+            <div class="product-info">
+
+                <div class="product-name">
+                    ${product.name}
+                </div>
+
+                <div>
+
+                    <span class="price">
+                        Rs ${product.price}
+                    </span>
+
+                    <span class="old-price">
+                        Rs ${product.oldPrice}
+                    </span>
+
+                </div>
+
+                <button
+                    class="buy-btn"
+                    onclick="addToCart(${product.id})"
+                >
+                    Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+
+/* SEARCH */
+
+function searchProducts(){
+
+    const value =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    const filtered =
+        products.filter(product =>
+            product.name
+            .toLowerCase()
+            .includes(value)
+        );
+
+    displayProducts(filtered);
+
+}
+
+
+/* CATEGORY FILTER */
+
+function filterCategory(category){
+
+    if(category === "all"){
+
+        displayProducts(products);
+        return;
+
+    }
+
+    const filtered =
+        products.filter(product =>
+            product.category === category
+        );
+
+    displayProducts(filtered);
+
+}
+
+
+/* ADD TO CART */
+
+function addToCart(id){
+
+    const product =
+        products.find(p => p.id === id);
+
+    cart.push(product);
+
+    updateCart();
+
+    openCart();
+
+}
+
+
+/* UPDATE CART */
+
+function updateCart(){
+
+    document
+        .getElementById("cartCount")
+        .innerText = cart.length;
+
+    const items =
+        document.getElementById("cartItems");
+
+    if(cart.length === 0){
+
+        items.innerHTML =
+            "Your cart is empty.";
+
+        document
+            .getElementById("cartTotal")
+            .innerText = "0";
+
+        return;
+    }
+
+    items.innerHTML = "";
+
+    let total = 0;
+
+    cart.forEach((product,index) => {
+
+        total += product.price;
+
+        items.innerHTML += `
+
+        <div class="cart-item">
+
+            <img src="${product.image}">
+
+            <div>
+
+                <b>${product.name}</b>
+
+                <p>Rs ${product.price}</p>
+
+                <button
+                    onclick="removeCart(${index})"
+                >
+                    Remove
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    document
+        .getElementById("cartTotal")
+        .innerText = total;
+
+}
+
+
+/* REMOVE */
+
+function removeCart(index){
+
+    cart.splice(index,1);
+
+    updateCart();
+
+}
+
+
+/* CART OPEN */
+
+function openCart(){
+
+    document
+        .getElementById("cart")
+        .classList.add("open");
+
+}
+
+
+/* CART CLOSE */
+
+function closeCart(){
+
+    document
+        .getElementById("cart")
+        .classList.remove("open");
+
+}
+
+
+/* CHECKOUT */
+
+function checkout(){
+
+    if(cart.length === 0){
+
+        alert("Your cart is empty.");
+
+        return;
+
+    }
+
+    /*
+       CONNECT THIS TO YOUR ADMIN PANEL
+       / BACKEND CHECKOUT API LATER.
+    */
+
+    alert(
+        "Checkout system will be connected to your OP MART admin panel."
+    );
+
+}
+
+
+/* INITIAL LOAD */
+
+displayProducts(products);
+
+</script>
+
+</body>
+  </html>
