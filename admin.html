@@ -1,1 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OP MART - Admin Panel</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f5f7;
+      color: #111;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 25px;
+    }
+
+    .box {
+      background: white;
+      padding: 25px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 15px rgba(0,0,0,.08);
+    }
+
+    h1, h2 {
+      margin-top: 0;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 7px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    button {
+      background: #111;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: .85;
+    }
+
+    .delete {
+      background: #d62828;
+    }
+
+    .logout {
+      background: #555;
+    }
+
+    .product {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 12px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #message {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- LOGIN -->
+  <div id="loginBox" class="box">
+    <h1>OP MART Admin</h1>
+    <p>Admin Login</p>
+
+    <input id="email" type="email" placeholder="Admin Email">
+    <input id="password" type="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <div id="loginMessage"></div>
+  </div>
+
+
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" class="hidden">
+
+    <div class="box">
+      <h1>OP MART Admin Panel</h1>
+      <button class="logout" onclick="logout()">Logout</button>
+    </div>
+
+
+    <!-- ADD PRODUCT -->
+    <div class="box">
+      <h2>Add Product</h2>
+
+      <input id="productName" type="text" placeholder="Product Name">
+      <input id="productPrice" type="number" placeholder="Price">
+      <input id="productCategory" type="text" placeholder="Category">
+      <input id="productStock" type="number" placeholder="Stock">
+
+      <button onclick="addProduct()">Add Product</button>
+
+      <div id="addMessage"></div>
+    </div>
+
+
+    <!-- PRODUCTS -->
+    <div class="box">
+      <h2>Products</h2>
+
+      <button onclick="loadProducts()">Refresh Products</button>
+
+      <div id="productsList"></div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  // SUPABASE CONFIG
+  const SUPABASE_URL = "https://oqlovhxuitkuqnmvttza.supabase.co";
+
+  const SUPABASE_ANON_KEY =
+    "sb_publishable_T5EUaq_ivr5-Wiknxa7Cgg_EGjX2YKM";
+
+  const supabaseClient =
+    supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+
+  // LOGIN
+  async function login() {
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const password =
+      document.getElementById("password").value;
+
+    const message =
+      document.getElementById("loginMessage");
+
+
+    if (!email || !password) {
+      message.textContent = "Email and password required.";
+      return;
+    }
+
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+
+    if (error) {
+      message.textContent = error.message;
+      return;
+    }
+
+
+    message.textContent = "";
+
+    document.getElementById("loginBox")
+      .classList.add("hidden");
+
+    document.getElementById("adminPanel")
+      .classList.remove("hidden");
+
+    loadProducts();
+  }
+
+
+  // LOGOUT
+  async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    document.getElementById("adminPanel")
+      .classList.add("hidden");
+
+    document.getElementById("loginBox")
+      .classList.remove("hidden");
+  }
+
+
+  // ADD PRODUCT
+  async function addProduct() {
+
+    const name =
+      document.getElementById("productName").value.trim();
+
+    const price =
+      document.getElementById("productPrice").value;
+
+    const category =
+      document.getElementById("productCategory").value.trim();
+
+    const stock =
+      document.getElementById("productStock").value;
+
+
+    if (!name || !price || !category || stock === "") {
+      document.getElementById("addMessage").textContent =
+        "Please fill all fields.";
+
+      return;
+    }
+
+
+    const { error } =
+      await supabaseClient
+        .from("products")
+        .insert([
+          {
+            name: name,
+            price: Number(price),
+            category: category,
+            stock: Number(stock)
+          }
+        ]);
+
+
+    if (error) {
+
+      document.getElementById("addMessage").textContent =
+        error.message;
+
+      return;
+    }
+
+
+    document.getElementById("addMessage").textContent =
+      "Product added successfully!";
+
+    document.getElementById("productName").value = "";
+    document.getElementById("productPrice").value = "";
+    document.getElementById("productCategory").value = "";
+    document.getElementById("productStock").value = "";
+
+    loadProducts();
+  }
+
+
+  // LOAD PRODUCTS
+  async function loadProducts() {
+
+    const list =
+      document.getElementById("productsList");
+
+    list.innerHTML = "Loading...";
+
+
+    const { data, error } =
+      await supabaseClient
+        .from("products")
+        .select("*")
+        .order("id", { ascending: false });
+
+
+    if (error) {
+      list.innerHTML =
+        "Error: " + error.message;
+
+      return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+      list.innerHTML =
+        "<p>No products added yet.</p>";
+
+      return;
+    }
+
+
+    list.innerHTML = "";
+
+
+    data.forEach(product => {
+
+      const div =
+        document.createElement("div");
+
+      div.className = "product";
+
+      div.innerHTML = `
+        <strong>${escapeHTML(product.name)}</strong>
+        <p>Price: ${product.price}</p>
+        <p>Category: ${escapeHTML(product.category || "")}</p>
+        <p>Stock: ${product.stock}</p>
+
+        <button
+          class="delete"
+          onclick="deleteProduct(${product.id})">
+          Delete
+        </button>
+      `;
+
+      list.appendChild(div);
+    });
+  }
+
+
+  // DELETE PRODUCT
+  async function deleteProduct(id) {
+
+    if (!confirm("Delete this product?")) {
+      return;
+    }
+
+
+    const { error } =
+      await supabaseClient
+        .from("products")
+        .delete()
+        .eq("id", id);
+
+
+    if (error) {
+
+      alert(error.message);
+
+      return;
+    }
+
+
+    loadProducts();
+  }
+
+
+  // BASIC HTML ESCAPE
+  function escapeHTML(value) {
+
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+
+  // CHECK EXISTING SESSION
+  async function checkSession() {
+
+    const { data } =
+      await supabaseClient.auth.getSession();
+
+
+    if (data.session) {
+
+      document.getElementById("loginBox")
+        .classList.add("hidden");
+
+      document.getElementById("adminPanel")
+        .classList.remove("hidden");
+
+      loadProducts();
+    }
+  }
+
+
+  checkSession();
+
+</script>
+
+</body>
+  </html>
