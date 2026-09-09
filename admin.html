@@ -328,11 +328,11 @@ list.appendChild(div);
 
 
   // DELETE PRODUCT
-  window.deleteProduct = async function(id) {
+  window.deleteProduct = function(id) {
+    alert("DELETE BUTTON WORKING - ID: " + id);
+  }
 
-    if (!confirm("Delete this product?")) {
-      return;
-    }
+              
 
 
     const { error } =
