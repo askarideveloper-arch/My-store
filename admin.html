@@ -324,9 +324,28 @@ data.forEach(product => {
 
 
   // DELETE PRODUCT
-  window.deleteProduct = function(id) {
-    alert("DELETE BUTTON WORKING - ID: " + id);
-  }  
+  window.deleteProduct = async function(id) {
+
+    if (!confirm("Delete this product?")) {
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("products")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        alert("Delete failed: " + error.message);
+        return;
+    }
+
+    alert("Product deleted successfully!");
+
+    loadProducts();
+  }
+
+    
     // BASIC HTML ESCAPE
   function escapeHTML(value) {
 
