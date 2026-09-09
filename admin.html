@@ -317,13 +317,12 @@
         <p>Stock: ${product.stock}</p>
 
         <button
-          class="delete"
-          onclick="deleteProduct(${product.id})">
-          Delete
-        </button>
-      `;
-
-      list.appendChild(div);
+  class="delete"
+  onclick="window.deleteProduct(${product.id})">
+  Delete
+</button>
+`;
+list.appendChild(div);
     });
   }
 
