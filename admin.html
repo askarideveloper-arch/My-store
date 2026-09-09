@@ -329,7 +329,7 @@
 
 
   // DELETE PRODUCT
-  async function deleteProduct(id) {
+  window.deleteProduct = async function(id) {
 
     if (!confirm("Delete this product?")) {
       return;
